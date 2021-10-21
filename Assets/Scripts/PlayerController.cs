@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnimator;
 
     private bool shouldFlap = false;
-    
 
     private void Awake() {
         playerRB = GetComponent<Rigidbody2D>();
@@ -39,5 +38,18 @@ public class PlayerController : MonoBehaviour
         playerRB.velocity = Vector2.zero;
         playerRB.AddForce(Vector2.up * forceMultiplier,ForceMode2D.Impulse);
         shouldFlap = false;
+        playerAnimator.SetTrigger("flap");
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        GameManager.Instance.NotifyPlayerDied();
+    }
+
+    private void OnBecameInvisible() {
+        GameManager.Instance.NotifyPlayerDied();
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+        GameManager.Instance.AddOneToScore();
     }
 }
