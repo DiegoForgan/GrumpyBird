@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
             shouldFlap = true;
         }
         if(transform.position.y < BOTTOMTHRESSHOLD) GameManager.Instance.NotifyPlayerDied();
+        if(GameManager.Instance.IsTutorialOnScreen()) transform.position = new Vector2(-6.5f,0f);
     }
 
     private void FixedUpdate() {
