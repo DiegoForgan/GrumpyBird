@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private int score;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private GameObject explanationPanel;
-    private int highScore;
+    private int highScore = 0;
     [SerializeField] private TMP_Text highScoreText;
     [SerializeField] private GameObject GameOverPanel;
     private static GameManager instance;
@@ -29,11 +29,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         score = 0;
-        highScore = 0;
+        highScore = PlayerPrefs.GetInt("HighScore");
         UpdateScoreUI();
         UpdateHighScoreUI();
         gameIsOver = false;
         ShowTutorial(true);
+        FindObjectOfType<AudioManager>().Play("GameplayTheme");
     }
 
     private void ShowTutorial(bool state){
@@ -59,6 +60,10 @@ public class GameManager : MonoBehaviour
     public void NotifyPlayerDied(){
         gameIsOver = true;
         Time.timeScale = 0f;
+        if(score > highScore){ 
+            PlayerPrefs.SetInt("HighScore",score);
+            PlayerPrefs.Save();
+        }
         ShowGameOverScreen();
     }
 
@@ -69,6 +74,7 @@ public class GameManager : MonoBehaviour
     public void AddOneToScore(){
         score++;
         UpdateScoreUI();
+        FindObjectOfType<AudioManager>().Play("point");
     }
     private void UpdateScoreUI(){
         scoreText.SetText("Score: "+ score);

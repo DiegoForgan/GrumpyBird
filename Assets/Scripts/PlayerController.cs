@@ -42,13 +42,14 @@ public class PlayerController : MonoBehaviour
         playerRB.AddForce(Vector2.up * forceMultiplier,ForceMode2D.Impulse);
         shouldFlap = false;
         playerAnimator.SetTrigger("flap");
+        FindObjectOfType<AudioManager>().Play("FlapFX");
     }
 
     private void OnCollisionEnter2D() {
         GameManager.Instance.NotifyPlayerDied();
     }
 
-    private void OnTriggerExit2D() {
+    private void OnTriggerEnter2D() {
         GameManager.Instance.AddOneToScore();
     }
 }
