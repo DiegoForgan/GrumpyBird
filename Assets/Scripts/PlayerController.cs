@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnimator;
 
     private bool shouldFlap = false;
+    private readonly float BOTTOMTHRESSHOLD = -6f;
 
     private void Awake() {
         playerRB = GetComponent<Rigidbody2D>();
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !shouldFlap){
             shouldFlap = true;
         }
+        if(transform.position.y < BOTTOMTHRESSHOLD) GameManager.Instance.NotifyPlayerDied();
     }
 
     private void FixedUpdate() {
@@ -41,15 +43,11 @@ public class PlayerController : MonoBehaviour
         playerAnimator.SetTrigger("flap");
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
+    private void OnCollisionEnter2D() {
         GameManager.Instance.NotifyPlayerDied();
     }
 
-    private void OnBecameInvisible() {
-        GameManager.Instance.NotifyPlayerDied();
-    }
-
-    private void OnTriggerExit2D(Collider2D other) {
+    private void OnTriggerExit2D() {
         GameManager.Instance.AddOneToScore();
     }
 }

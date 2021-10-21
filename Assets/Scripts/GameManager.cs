@@ -14,27 +14,21 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     private bool gameIsOver;
 
-    public static GameManager Instance{
-
-        get{
-           if(instance == null) instance = FindObjectOfType<GameManager>();
-           return instance; 
-        }
-    }
+    public static GameManager Instance{ get{ return instance; } }
     
     private void Awake() {
         if (instance == null) instance = this;
         else {
           Destroy(gameObject);
-          return;
         }
-        DontDestroyOnLoad(gameObject);
     }
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
         highScore = 0;
+        UpdateScoreUI();
+        UpdateHighScoreUI();
         gameIsOver = false;
     }
 
@@ -47,7 +41,8 @@ public class GameManager : MonoBehaviour
     private void RestartGame(){
         gameIsOver = false;
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameOverPanel.SetActive(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void NotifyPlayerDied(){
